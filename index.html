@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Unit Calculator</title>
+</head>
+
+<body>
+    <h2>Unit Calculator</h2>
+    <div>
+        <table>
+            <tr>
+                <td>Name: </td>
+                <td><input name="userName" id="userName" /></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td><input name="convertFrom" id="convert" /></td>
+                <td><input name="convertTo" id="answer" readonly="true" /></td>
+            </tr>
+            <tr>
+                <td><select id="fromUnit">
+                        <option value="liter" selected>liter</option>
+                        <option value="barrel">barrel</option>
+                        <option value="hogs-heads">hogs heads</option>
+                        <option value="barn-megaparsercs">barn-megaparsercs</option>
+                    </select></td>
+                <td><select id="toUnit">
+                        <option value="barrel" selected>barrel</option>
+                        <option value="liter">liter</option>
+                        <option value="hogs-heads">hogs heads</option>
+                        <option value="barn-megaparsercs">barn-megaparsercs</option>
+                    </select></td>
+            </tr>
+            <tr>
+                <td><button id="calculate">Calculate</button></td>
+            </tr>
+        </table>
+    </div>
+</body>
+<script type="text/javascript">
+    async function postData(url = '', data = {}) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+            method: 'POST',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    document.getElementById('calculate').addEventListener('click', () => {
+        const reqData = {
+            unit_from: document.getElementById('fromUnit').value,
+            unit_to: document.getElementById('toUnit').value,
+            convert: document.getElementById('convert').value,
+        };
+        postData('http://localhost:3000/api/convert', reqData)
+            .then(data => {
+                document.getElementById('answer').value = data.answer;
+            });
+    });
+
+</script>
+
+</html>
